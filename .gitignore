@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+
+# генерируются пайплайном (README, шаги 2–6)
+llm-on-chuvash/data/
