@@ -1,0 +1,23 @@
+== tokenize vocab=4096 ==
+total=17,412,867 train=17,238,739 val=174,128
+== tokenize vocab=16384 ==
+total=13,942,721 train=13,803,294 val=139,427
+== exp v4096 ==
+done. best_val=3.6422
+== exp v8192 ==
+done. best_val=4.0817
+== exp v16384 ==
+done. best_val=4.5352
+== exp swa128 ==
+done. best_val=0.0261
+== summary (последний val_loss каждого прогона) ==
+v4096    {"step": 1200, "train_loss": 3.0446, "val_loss": 3.6422, "lr": 0.0003, "tok_s": 5484, "ppl": 38.2, "elapsed_s": 298.7}
+v8192    {"step": 1200, "train_loss": 2.8113, "val_loss": 4.0817, "lr": 0.0003, "tok_s": 4565, "ppl": 59.2, "elapsed_s": 358.9}
+v16384   {"step": 1200, "train_loss": 3.2642, "val_loss": 4.5352, "lr": 0.0003, "tok_s": 2621, "ppl": 93.2, "elapsed_s": 625.1}
+swa128   {"step": 1200, "train_loss": 0.0198, "val_loss": 0.0261, "lr": 0.0003, "tok_s": 4389, "ppl": 1.0, "elapsed_s": 373.2}
+
+# 2026-10-31: прогон swa128 признан недействительным и перезапущен.
+# Баг: bool-маска кастилась в float (.to(q.dtype)) — float attn_mask в SDPA аддитивный,
+# маскировка отключалась полностью, модель видела будущие токены (loss 0.026 = копирование).
+# Плюс tril(swa_window) не ограничивал прошлое. Исправлено: triu(-swa_window) + bool-маска.
+# Старый прогон: checkpoints/swa128.broken_mask

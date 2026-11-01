@@ -1,0 +1,7 @@
+{
+  "vocab_size": 8192,
+  "train_seconds": 15.6,
+  "corpus_chars": 51222364,
+  "corpus_tokens": 16205908,
+  "chars_per_token": 3.161
+}
